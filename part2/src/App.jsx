@@ -6,10 +6,18 @@ const Course = ({course}) =>{
     </div>
   ))
 
+  let sum = 0
+  for(let i = 0; i < course.parts.length; i++){
+    sum += course.parts[i].exercises
+  }
+  
+  console.log("The sum is: ", sum)
+
   return(
     <div>
       <h1>{course.name}</h1>
       <>{parts}</>
+      <p>The total number of exercise: {sum}</p>
     </div>
   )
 }

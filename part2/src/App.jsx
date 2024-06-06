@@ -11,6 +11,7 @@ const Course = ({course}) =>{
     return sum + course.exercises
   }, 0)
 
+  //Renaming my commit to be in line with the exercises.
 
   return(
     <div>

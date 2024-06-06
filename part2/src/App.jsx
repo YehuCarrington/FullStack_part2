@@ -1,17 +1,16 @@
 const Course = ({course}) =>{
 
-  let parts = course.parts.map((course,i) => (
+  let parts = course.parts.map((course, i) => (
     <div key={i}>
       <p>{course.name} {course.exercises}</p>
     </div>
   ))
 
-  let sum = 0
-  for(let i = 0; i < course.parts.length; i++){
-    sum += course.parts[i].exercises
-  }
-  
-  console.log("The sum is: ", sum)
+
+  let sum = course.parts.reduce((sum, course) => {
+    return sum + course.exercises
+  }, 0)
+
 
   return(
     <div>

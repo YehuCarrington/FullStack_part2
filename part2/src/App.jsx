@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function DisplayPhonebook({persons}) {
+function DisplayPhonebook({ persons }) {
   return persons.map((person, index) => {
     return (
       <li key={index}>
@@ -13,7 +13,7 @@ function DisplayPhonebook({persons}) {
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
-  ]) 
+  ])
   const [newName, setNewName] = useState('')
 
   const handleNewName = (event) => {
@@ -23,24 +23,32 @@ const App = () => {
 
   const updatePersons = (event) => {
     event.preventDefault()
-    const personObj = {name: newName}
-    setPersons(persons.concat(personObj))
-    setNewName('')
+    const personObj = { name: newName }
+
+    //We can perform the check here, lets access the array of objects
+    const checkPersons = persons.map(person => person.name)
+    if (checkPersons.includes(newName)) { alert( `${newName} is already in the phonebook`) }
+    else {
+      setPersons(persons.concat(personObj))
+      setNewName('')
+    }
   }
+
+
 
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={updatePersons}>
         <div>
-          name: <input placeholder='Enter a name' value={newName} onChange={handleNewName}/>
+          name: <input placeholder='Enter a name' value={newName} onChange={handleNewName} />
         </div>
         <div>
           <button type="submit">Save</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <DisplayPhonebook persons={persons}/>
+      <DisplayPhonebook persons={persons} />
 
     </div>
   )

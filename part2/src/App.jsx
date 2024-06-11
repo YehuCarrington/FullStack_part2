@@ -1,14 +1,8 @@
 import { useState } from 'react'
-
-function DisplayPhonebook({ persons }) {
-  return persons.map((person, index) => {
-    return (
-      <li key={index}>
-        {person.name} {person.number}
-      </li>
-    )
-  })
-}
+import DisplayPhonebook from './components/DisplayPhonebook'
+import PhonebookForm from './components/PhonebookForm'
+import SearchForm from './components/SearchForm'
+import DisplaySeatchResult from './components/DisplaySearchResult'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -19,7 +13,9 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [searchValue, setSearchValue] = useState('')
   const [newId, setId] = useState(5)
+  const [filteredPeople, setFilteredPeople] = useState([])
 
   const handleNewName = (event) => {
     console.log(event.target.value)
@@ -29,6 +25,36 @@ const App = () => {
   const handleNewNumber = (event) => {
     console.log(event.target.value)
     setNewNumber(event.target.value)
+  }
+
+  const handleSearchValue = (event) => {
+    console.log(event.target.value)
+    const searchTerm = event.target.value
+    setSearchValue(searchTerm)
+
+    //grab the list of names
+    //You can grab the list of names, by mapping each name from the 
+    //object into an array of names
+    const peopleDB = persons.map(person => person.name)
+
+    //grab the search term
+    console.log(`The searchTerm is: ${searchTerm}`)
+
+    //filter the list of names on the search term
+    const filteredPeople = peopleDB.filter((people) => people.toLowerCase().includes(searchTerm.toLowerCase()))
+    console.log(`The peopleDB are: ${peopleDB}`)
+    console.log(`The filteredPeople are: ${filteredPeople}`)
+
+    if(searchTerm === '')
+      setFilteredPeople([])
+    else
+      setFilteredPeople(filteredPeople)
+
+
+
+    //return the list of filtered names into an array
+    //Display the list of filtered names
+
   }
 
   const updatePersons = (event) => {
@@ -54,14 +80,21 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={updatePersons}>
-        <div> name: <input placeholder='Enter a name' value={newName} onChange={handleNewName} /> </div>
-        <div> number: <input placeholder='Enter a number' value={newNumber} onChange={handleNewNumber} /></div>
-        <div>
-          <button type="submit">Save</button>
-        </div>
-      </form>
+      <h2>Search</h2>
+      <SearchForm
+        searchValue={searchValue}
+        handleSearchValue={handleSearchValue} />
+
+      <h2>Search Results</h2>
+      <DisplaySeatchResult filteredPeople={filteredPeople}/>
+
+      <PhonebookForm updatePersons={updatePersons}
+        handleNewName={handleNewName}
+        handleNewNumber={handleNewNumber}
+        newName={newName}
+        newNumber={newNumber} />
+
+      
       <h2>Numbers</h2>
       <DisplayPhonebook persons={persons} />
 

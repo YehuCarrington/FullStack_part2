@@ -1,16 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import DisplayPhonebook from './components/DisplayPhonebook'
 import PhonebookForm from './components/PhonebookForm'
 import SearchForm from './components/SearchForm'
 import DisplaySeatchResult from './components/DisplaySearchResult'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '1868-555-5555', id: 1 },
-    { name: 'Hadas Melix', number: '1868-777-7777', id: 2 },
-    { name: 'Elsa Gate', number: '1868-444-4444', id: 3 },
-    { name: 'Panda Trix', number: '1868-222-2222', id: 4 }
-  ])
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled', response.data)
+        setPersons(response.data)
+      })
+  }, [])
+
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchValue, setSearchValue] = useState('')

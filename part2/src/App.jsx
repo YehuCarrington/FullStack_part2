@@ -110,3 +110,21 @@ const App = () => {
 }
 
 export default App
+
+//Task List: 
+/*
+*  2.12: Store the phone numbers to the backend
+*  2.13: Extract the code that handles communication onto it's own module
+*  2.14: Allow the users to delete numbers from the server with a dedicated delete button utilize window.confirm
+*  2.15: Change the functionality so that If a number is already added, you can update/replace the number with the next one
+*/
+
+//Plan of action
+/*
+* Extracting communication to its own module should be done from the beginning
+* We've been asked to implement the above functionalities, broken down into units we have the following
+* storeFunction <-- Stores number to the backend (updates the json)
+* deleteFunction <-- Removes items from the backend 
+* updateFunction <-- Checks the list for the entry if its there, updateFunction else do storeFunction
+* 
+*/

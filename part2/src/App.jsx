@@ -4,17 +4,20 @@ import DisplayPhonebook from './components/DisplayPhonebook'
 import PhonebookForm from './components/PhonebookForm'
 import SearchForm from './components/SearchForm'
 import DisplaySeatchResult from './components/DisplaySearchResult'
+import phoneService from './services/comms'
 
 const App = () => {
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled', response.data)
-        setPersons(response.data)
+
+    //Lets pull the data from the server using the get entries function
+    phoneService.getEntries()
+      .then(entries => {
+        console.log(`Entries: ${entries}`);
+        setPersons(entries);
+        console.log('persons: ', persons);
       })
+
   }, [])
 
   const [persons, setPersons] = useState([])

@@ -1,5 +1,9 @@
 const DisplayPhonebook = ({ persons }) => {
     
+    if (!persons) {
+        return <p>Loading...</p>;
+    }
+    
     return persons.map((person) => {
         
         return (

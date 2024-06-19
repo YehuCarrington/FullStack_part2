@@ -9,7 +9,6 @@ import phoneService from './services/comms'
 const App = () => {
 
   useEffect(() => {
-
     //Lets pull the data from the server using the get entries function
     phoneService.getEntries()
       .then(entries => {
@@ -55,7 +54,7 @@ const App = () => {
     console.log(`The peopleDB are: ${peopleDB}`)
     console.log(`The filteredPeople are: ${filteredPeople}`)
 
-    if(searchTerm === '')
+    if (searchTerm === '')
       setFilteredPeople([])
     else
       setFilteredPeople(filteredPeople)
@@ -71,6 +70,7 @@ const App = () => {
     event.preventDefault()
     const personObj = { name: newName, number: newNumber, id: newId }
 
+
     if ((newName.trim().length === 0) || (newNumber.trim().length === 0))
       alert('Please enter a name AND a number')
     else {
@@ -78,10 +78,14 @@ const App = () => {
       const checkPersons = persons.map(person => person.name)
       if (checkPersons.includes(newName)) { alert(`${newName} is already in the phonebook`) }
       else {
-        setPersons(persons.concat(personObj))
-        setNewName('')
-        setNewNumber('')
-        setId(i => i + 1)
+        phoneService.createEntry(personObj)
+          .then(() => {
+            setPersons(persons.concat(personObj))
+            setNewName('')
+            setNewNumber('')
+            setId(i => i + 1)
+          }
+          )
       }
     }
   }
@@ -96,7 +100,7 @@ const App = () => {
         handleSearchValue={handleSearchValue} />
 
       <h2>Search Results</h2>
-      <DisplaySeatchResult filteredPeople={filteredPeople}/>
+      <DisplaySeatchResult filteredPeople={filteredPeople} />
 
       <PhonebookForm updatePersons={updatePersons}
         handleNewName={handleNewName}
@@ -104,7 +108,7 @@ const App = () => {
         newName={newName}
         newNumber={newNumber} />
 
-      
+
       <h2>Numbers</h2>
       <DisplayPhonebook persons={persons} />
 
@@ -114,7 +118,7 @@ const App = () => {
 
 export default App
 
-//Task List: 
+//Task List:
 /*
 *  2.12: Store the phone numbers to the backend
 *  2.13: Extract the code that handles communication onto it's own module

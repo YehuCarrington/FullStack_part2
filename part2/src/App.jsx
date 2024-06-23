@@ -12,9 +12,7 @@ const App = () => {
     //Lets pull the data from the server using the get entries function
     phoneService.getEntries()
       .then(entries => {
-        console.log(`Entries: ${entries}`);
         setPersons(entries);
-        console.log('persons: ', persons);
       })
 
   }, [])
@@ -23,7 +21,6 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchValue, setSearchValue] = useState('')
-  const [newId, setId] = useState(5)
   const [filteredPeople, setFilteredPeople] = useState([])
 
   const handleNewName = (event) => {
@@ -58,39 +55,65 @@ const App = () => {
       setFilteredPeople([])
     else
       setFilteredPeople(filteredPeople)
-
-
-
-    //return the list of filtered names into an array
-    //Display the list of filtered names
-
   }
 
   const updatePersons = (event) => {
     event.preventDefault()
-    const personObj = { name: newName, number: newNumber, id: newId }
-
+    const personObj = { name: newName, number: newNumber }
+    console.log("Inside updatePersons: ", persons)
 
     if ((newName.trim().length === 0) || (newNumber.trim().length === 0))
       alert('Please enter a name AND a number')
     else {
       //We can perform the check here, lets access the array of objects
       const checkPersons = persons.map(person => person.name)
-      if (checkPersons.includes(newName)) { alert(`${newName} is already in the phonebook`) }
+      const checkNumber = persons.map(person => person.number)
+      if (checkPersons.includes(newName)) {
+        if(!checkNumber.includes(newNumber)){
+          let proceed = confirm(`${newName} is already in the phonebook, Update #?`)
+          if(proceed){
+            const subject = persons.filter(person => person.name == newName )
+            console.log("subject ID: ", subject[0].id)
+            phoneService.updateEntry(subject[0].id, personObj)
+              .then(() => {
+                console.log("we updated sucessfully now to rerender")
+                const subjectIndex = persons.findIndex(person => person.name === newName)
+                if (subjectIndex !== -1 ){
+                  const updatedPersons = [...persons]
+                  updatedPersons[subjectIndex] = {...updatedPersons[subjectIndex], number: newNumber}
+                  setPersons(updatedPersons)
+                  setNewName('')
+                  setNewNumber('')
+                }
+              })
+          }
+        } else {
+          alert(`${newName} is already in the phonebook`)
+        }
+      }
       else {
         phoneService.createEntry(personObj)
           .then(() => {
             setPersons(persons.concat(personObj))
             setNewName('')
             setNewNumber('')
-            setId(i => i + 1)
           }
           )
       }
     }
   }
 
-
+  const deletePerson = (person, id) => {
+    let proceed = confirm(`Do you want to delete ${person.name} from the phonebook?`)
+    if (proceed) {
+      phoneService.deleteEntry(id).
+        then(() => {
+          console.log(`persons ID is: ${id}`)
+          console.log("Entry succesfully deleted.")
+          setPersons(persons.filter(person => person.id !== id));
+        })
+    }
+  }
 
   return (
     <div>
@@ -110,7 +133,8 @@ const App = () => {
 
 
       <h2>Numbers</h2>
-      <DisplayPhonebook persons={persons} />
+      <DisplayPhonebook persons={persons}
+        deletePerson={deletePerson} />
 
     </div>
   )

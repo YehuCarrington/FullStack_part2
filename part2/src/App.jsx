@@ -3,8 +3,10 @@ import axios from 'axios'
 import DisplayPhonebook from './components/DisplayPhonebook'
 import PhonebookForm from './components/PhonebookForm'
 import SearchForm from './components/SearchForm'
+import Notification from './components/Notification'
 import DisplaySeatchResult from './components/DisplaySearchResult'
 import phoneService from './services/comms'
+import './index.css'
 
 const App = () => {
 
@@ -22,6 +24,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchValue, setSearchValue] = useState('')
   const [filteredPeople, setFilteredPeople] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleNewName = (event) => {
     console.log(event.target.value)
@@ -84,7 +87,16 @@ const App = () => {
                   setPersons(updatedPersons)
                   setNewName('')
                   setNewNumber('')
+                  setErrorMessage(`You succesfully changed ${newName} to ${newNumber}`)
+                  setTimeout(() => {
+                    setErrorMessage(null)
+                  }, 5000)
                 }
+              }).catch(error => {
+                setErrorMessage(`Something went wrong`)
+                setTimeout(() => {
+                  setErrorMessage(null)
+                }, 5000)
               })
           }
         } else {
@@ -97,8 +109,17 @@ const App = () => {
             setPersons(persons.concat(personObj))
             setNewName('')
             setNewNumber('')
+            setErrorMessage(`You succesfully added ${newName} to the phonebook`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           }
-          )
+          ).catch(error => {
+            setErrorMessage(`Failed to add ${newName} to the phonebook`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          })
       }
     }
   }
@@ -124,6 +145,8 @@ const App = () => {
 
       <h2>Search Results</h2>
       <DisplaySeatchResult filteredPeople={filteredPeople} />
+
+      <Notification message={errorMessage} type={"notification"}/>
 
       <PhonebookForm updatePersons={updatePersons}
         handleNewName={handleNewName}

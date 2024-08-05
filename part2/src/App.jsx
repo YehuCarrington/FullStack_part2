@@ -25,6 +25,7 @@ const App = () => {
   const [searchValue, setSearchValue] = useState('')
   const [filteredPeople, setFilteredPeople] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const handleNewName = (event) => {
     console.log(event.target.value)
@@ -87,13 +88,13 @@ const App = () => {
                   setPersons(updatedPersons)
                   setNewName('')
                   setNewNumber('')
-                  setErrorMessage(`You succesfully changed ${newName} to ${newNumber}`)
+                  setSuccessMessage(`You successfully changed ${newName} to ${newNumber}`)
                   setTimeout(() => {
-                    setErrorMessage(null)
+                    setSuccessMessage(null)
                   }, 5000)
                 }
               }).catch(error => {
-                setErrorMessage(`Something went wrong`)
+                setErrorMessage(`${newName} is no longer in the phonebook`)
                 setTimeout(() => {
                   setErrorMessage(null)
                 }, 5000)
@@ -109,9 +110,9 @@ const App = () => {
             setPersons(persons.concat(personObj))
             setNewName('')
             setNewNumber('')
-            setErrorMessage(`You successfully added ${newName} to the phonebook`)
+            setSuccessMessage(`You successfully added ${newName} to the phonebook`)
             setTimeout(() => {
-              setErrorMessage(null)
+              setSuccessMessage(null)
             }, 5000)
           }
           ).catch(error => {
@@ -132,6 +133,17 @@ const App = () => {
           console.log(`persons ID is: ${id}`)
           console.log("Entry succesfully deleted.")
           setPersons(persons.filter(person => person.id !== id));
+          setSuccessMessage(`You successfully deleted ${person.name} from the phonebook`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        }
+        ).catch(error => {
+          setErrorMessage(`${person.name} has already been deleted.`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+
         })
     }
   }
@@ -146,7 +158,7 @@ const App = () => {
       <h2>Search Results</h2>
       <DisplaySeatchResult filteredPeople={filteredPeople} />
 
-      <Notification message={errorMessage} type={"notification"}/>
+      <Notification message={successMessage} type={"notification"}/>
       <Notification message={errorMessage} type={"error"}/>
 
       <PhonebookForm updatePersons={updatePersons}

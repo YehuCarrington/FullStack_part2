@@ -12,13 +12,16 @@ const Notification = ({message, type}) => {
                 {message}
             </div>
         )
-    }
-
-    if(type === 'error'){
+    } else if (type === 'error'){
         return (
             <div className='error'>
                 {message}
             </div>
+        )
+    } else {
+        console.log(`The message: "${message}" was not shown`)
+        return(
+            null
         )
     }
 }

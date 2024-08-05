@@ -24,7 +24,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchValue, setSearchValue] = useState('')
   const [filteredPeople, setFilteredPeople] = useState([])
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const handleNewName = (event) => {
     console.log(event.target.value)
@@ -109,7 +109,7 @@ const App = () => {
             setPersons(persons.concat(personObj))
             setNewName('')
             setNewNumber('')
-            setErrorMessage(`You succesfully added ${newName} to the phonebook`)
+            setErrorMessage(`You successfully added ${newName} to the phonebook`)
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
@@ -147,6 +147,7 @@ const App = () => {
       <DisplaySeatchResult filteredPeople={filteredPeople} />
 
       <Notification message={errorMessage} type={"notification"}/>
+      <Notification message={errorMessage} type={"error"}/>
 
       <PhonebookForm updatePersons={updatePersons}
         handleNewName={handleNewName}
